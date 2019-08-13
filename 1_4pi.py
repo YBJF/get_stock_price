@@ -57,8 +57,9 @@ def sendMail(mail_server, port, sender,sender_passw, receiver,name,price):
         mail.quit()
         print("邮件发送失败！")
 
+
 def main():
-    goods='吉他'
+    goods='名字'
     depth=9
     kv = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:62.0) Gecko/20100101 Firefox/62.0'}
     baiduurl=['https://gupiao.baidu.com/stock/sh600600.html',
@@ -74,53 +75,60 @@ def main():
     price=[0,0,0,0,0,0,0,0,0]
     path="/home/yczheng/python_program"
     filename=path+'/'+'stock.txt'
+    hour=time.strftime("%H",time.localtime())     #获取小时和周几
+    day=time.strftime("%A",time.localtime())
     while True:
-        for i in range(depth):  
-            url=baiduurl[i]
+        if(int(hour)>=9 and int(hour)<16 and day!="Saturday"and day!="Sunday"):
+            for i in range(depth):  
+                url=baiduurl[i]
+                try:
+                    html=getHTMLText(url,kv)
+                    price[i]=parsePage(html)             
+                except:
+                    continue
+            print(time.ctime()+'-----青岛啤酒:'+str(price[0])+'--今世缘'+str(price[1])+'--天山生物'+str(price[2])+'--科大讯飞'+str(price[3])
+                  +'--涪陵榨菜'+str(price[4])+'--顺鑫农业'+str(price[5])+'--海航科技'+str(price[6])+'--华立股份'+str(price[7])+'--天山股份'+str(price[8])) #打印当前时间和价格
+            content=time.ctime()+'-----青岛啤酒:'+str(price[0])+'--今世缘'+str(price[1])+'--天山生物'+str(price[2]+'--科大讯飞'+str(price[3])
+                  +'--涪陵榨菜'+str(price[4])+'--顺鑫农业'+str(price[5])+'--海航科技'+str(price[6])+'--华立股份'+str(price[7])+'--天山股份'+str(price[8]))
             try:
-                html=getHTMLText(url,kv)
-                price[i]=parsePage(html)             
+                if(float(str(price[0]))<=40):
+                    name='青岛啤酒：'
+                    sendMail(mail_server, port, sender, sender_passw, receiver,name,price[0])
+                if(float(str(price[1]))>=30):
+                    name='今世缘：'
+                    sendMail(mail_server, port, sender, sender_passw, receiver,name,price[1])
+                if(float(str(price[2]))<=5):
+                    name='天山生物：'
+                    sendMail(mail_server, port, sender, sender_passw, receiver,name,price[2])
+                if(float(str(price[3]))<=28):
+                    name='科大讯飞：'
+                    sendMail(mail_server, port, sender, sender_passw, receiver,name,price[3])
+                if(float(str(price[4]))<=21):
+                    name='涪陵榨菜：'
+                    sendMail(mail_server, port, sender, sender_passw, receiver,name,price[4])
+                if(float(str(price[5]))<=37.6):
+                    name='顺鑫农业：'
+                    sendMail(mail_server, port, sender, sender_passw, receiver,name,price[5])
+                if(float(str(price[6]))<=2.75):
+                    name='海航科技：'
+                    sendMail(mail_server, port, sender, sender_passw, receiver,name,price[6])
+                if(float(str(price[7]))<=12.5):
+                    name='华立股份：'
+                    sendMail(mail_server, port, sender, sender_passw, receiver,name,price[7])
+                if(float(str(price[8]))<=9.0):
+                    name='天山股份：'
+                    sendMail(mail_server, port, sender, sender_passw, receiver,name,price[8])
             except:
+                time.sleep(5)
                 continue
-        print(time.ctime()+'-----青岛啤酒:'+str(price[0])+'--今世缘'+str(price[1])+'--天山生物'+str(price[2])+'--科大讯飞'+str(price[3])
-              +'--涪陵榨菜'+str(price[4])+'--顺鑫农业'+str(price[5])+'--海航科技'+str(price[6])+'--华立股份'+str(price[7])+'--天山股份'+str(price[8])) #打印当前时间和价格
-        content=time.ctime()+'-----青岛啤酒:'+str(price[0])+'--今世缘'+str(price[1])+'--天山生物'+str(price[2]+'--科大讯飞'+str(price[3])
-              +'--涪陵榨菜'+str(price[4])+'--顺鑫农业'+str(price[5])+'--海航科技'+str(price[6])+'--华立股份'+str(price[7])+'--天山股份'+str(price[8]))
-        try:
-            if(float(str(price[0]))<=40):
-                name='青岛啤酒：'
-                sendMail(mail_server, port, sender, sender_passw, receiver,name,price[0])
-            if(float(str(price[1]))>=30):
-                name='今世缘：'
-                sendMail(mail_server, port, sender, sender_passw, receiver,name,price[1])
-            if(float(str(price[2]))<=5):
-                name='天山生物：'
-                sendMail(mail_server, port, sender, sender_passw, receiver,name,price[2])
-            if(float(str(price[3]))<=28):
-                name='科大讯飞：'
-                sendMail(mail_server, port, sender, sender_passw, receiver,name,price[3])
-            if(float(str(price[4]))<=21):
-                name='涪陵榨菜：'
-                sendMail(mail_server, port, sender, sender_passw, receiver,name,price[4])
-            if(float(str(price[5]))<=37.6):
-                name='顺鑫农业：'
-                sendMail(mail_server, port, sender, sender_passw, receiver,name,price[5])
-            if(float(str(price[6]))<=2.75):
-                name='海航科技：'
-                sendMail(mail_server, port, sender, sender_passw, receiver,name,price[6])
-            if(float(str(price[7]))<=12.5):
-                name='华立股份：'
-                sendMail(mail_server, port, sender, sender_passw, receiver,name,price[7])
-            if(float(str(price[8]))<=9.0):
-                name='天山股份：'
-                sendMail(mail_server, port, sender, sender_passw, receiver,name,price[8])
-        except:
-            time.sleep(5)
-            continue
-        f=open(filename,'a+')
-        f.write(content+'\n')
-        f.close()
-        time.sleep(random.randint(70, 120))   #随机70-120秒的时间
+            f=open(filename,'a+')
+            f.write(content+'\n')
+            f.close()
+            time.sleep(random.randint(70, 120))   #随机70-120秒的时间
+        else:
+            print("现在不是开市时间")
+            time.sleep(600)
+        
         
 main()
             
