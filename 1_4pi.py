@@ -7,12 +7,11 @@ from email.header import Header
 import random
 import os
 
-mail_server = "smtp.qq.com"        # 发件人的 SMTP 服务器
+mail_server = "smtp.qq.com"        
 port = "465"  # 服务端口
-sender = "778349156@qq.com"     # 发件人邮箱帐号
-sender_passw = "rejgndistmjabfch"      # 发件人邮箱密码(第3方登录授权密码,非QQ密码)
-#receiver = "352415083@qq.com"
-receiver = "1014616248@qq.com"      # 收件人邮箱帐号
+sender = "778349156@qq.com"     
+sender_passw = "rejgndistmjabfch"
+receiver = "1014616248@qq.com"      
 
 def getHTMLText(url,kv):
     try:
@@ -42,11 +41,11 @@ def parsePage(html):
     except:
         print("商品信息输出失败")
 
-def sendMail(mail_server, port, sender,sender_passw, receiver,name,price):
+def sendMail(mail_server, port, sender,sender_passw, receiver,name):
     msg = MIMEText("", "plain", "utf-8")     # 邮件内容（正文）
     msg['From'] = Header("夜半疾风", "utf-8")        # 发件人信息
     msg['To'] = Header("llong", "utf-8")        # 收件人信息
-    msg['Subject'] = str(name)+str(price)              # 邮件的主题
+    msg['Subject'] = str(name)              # 邮件的主题
     try:
         mail = smtplib.SMTP_SSL(mail_server, port)  # 使用SMTP()方法指向服务器（使用QQ邮箱服务器时，需改用 SMTP_SSL()方法）
         print(mail.login(sender, sender_passw) )    # 请求服务器，登录帐号
@@ -71,7 +70,7 @@ def main():
               'https://gupiao.baidu.com/stock/sh600751.html',
               'https://gupiao.baidu.com/stock/sh603038.html',
               'https://gupiao.baidu.com/stock/sz000877.html']
-    infoList=[]
+    
     price=[0,0,0,0,0,0,0,0,0]
     path="/home/yczheng/python_program"
     filename=path+'/'+'stock.txt'
@@ -86,41 +85,35 @@ def main():
                     price[i]=parsePage(html)             
                 except:
                     continue
-            print(time.ctime()+'-----青岛啤酒:'+str(price[0])+'--今世缘'+str(price[1])+'--天山生物'+str(price[2])+'--科大讯飞'+str(price[3])
-                  +'--涪陵榨菜'+str(price[4])+'--顺鑫农业'+str(price[5])+'--海航科技'+str(price[6])+'--华立股份'+str(price[7])+'--天山股份'+str(price[8])) #打印当前时间和价格
             content=time.ctime()+'-----青岛啤酒:'+str(price[0])+'--今世缘'+str(price[1])+'--天山生物'+str(price[2]+'--科大讯飞'+str(price[3])
                   +'--涪陵榨菜'+str(price[4])+'--顺鑫农业'+str(price[5])+'--海航科技'+str(price[6])+'--华立股份'+str(price[7])+'--天山股份'+str(price[8]))
+            print(content) #打印当前时间和价格
+ 
+            infolist=''
             try:
                 if(float(str(price[0]))<=40):
-                    name='青岛啤酒：'
-                    sendMail(mail_server, port, sender, sender_passw, receiver,name,price[0])
+                    infolist=infolist+'青岛啤酒:'+(str(price[0]))
                 if(float(str(price[1]))>=30):
-                    name='今世缘：'
-                    sendMail(mail_server, port, sender, sender_passw, receiver,name,price[1])
+                    infolist=infolist+'--今世缘:'+(str(price[1]))
                 if(float(str(price[2]))<=5):
-                    name='天山生物：'
-                    sendMail(mail_server, port, sender, sender_passw, receiver,name,price[2])
+                    infolist=infolist+'--天山生物:'+(str(price[2]))
                 if(float(str(price[3]))<=28):
-                    name='科大讯飞：'
-                    sendMail(mail_server, port, sender, sender_passw, receiver,name,price[3])
+                    infolist=infolist+'--科大讯飞:'+(str(price[3]))
                 if(float(str(price[4]))<=21):
-                    name='涪陵榨菜：'
-                    sendMail(mail_server, port, sender, sender_passw, receiver,name,price[4])
+                    infolist=infolist+'--涪陵榨菜:'+(str(price[4]))
                 if(float(str(price[5]))<=37.6):
-                    name='顺鑫农业：'
-                    sendMail(mail_server, port, sender, sender_passw, receiver,name,price[5])
+                    infolist=infolist+'--顺鑫农业:'+(str(price[5]))
                 if(float(str(price[6]))<=2.75):
-                    name='海航科技：'
-                    sendMail(mail_server, port, sender, sender_passw, receiver,name,price[6])
+                    infolist=infolist+'--海航科技:'+(str(price[6]))
                 if(float(str(price[7]))<=12.5):
-                    name='华立股份：'
-                    sendMail(mail_server, port, sender, sender_passw, receiver,name,price[7])
+                    infolist=infolist+'--华立股份:'+(str(price[7]))
                 if(float(str(price[8]))<=9.0):
-                    name='天山股份：'
-                    sendMail(mail_server, port, sender, sender_passw, receiver,name,price[8])
+                    infolist==infolist+'--天山股份:'+(str(price[8])) 
             except:
-                time.sleep(5)
+                time.sleep(random.randint(70, 120))
                 continue
+            if(infolist!=''):    
+                sendMail(mail_server, port, sender, sender_passw, receiver,infolist)
             f=open(filename,'a+')
             f.write(content+'\n')
             f.close()
