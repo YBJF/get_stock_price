@@ -74,9 +74,9 @@ def main():
     price=[0,0,0,0,0,0,0,0,0]
     path="/home/yczheng/python_program"
     filename=path+'/'+'stock.txt'
-    hour=time.strftime("%H",time.localtime())     #获取小时和周几
-    day=time.strftime("%A",time.localtime())
     while True:
+        hour=time.strftime("%H",time.localtime())     #获取小时和周几
+        day=time.strftime("%A",time.localtime())
         if(int(hour)>=9 and int(hour)<16 and day!="Saturday"and day!="Sunday"):
             for i in range(depth):  
                 url=baiduurl[i]
