@@ -93,7 +93,7 @@ def main():
             try:
                 if(float(str(price[0]))<=40):
                     infolist=infolist+'青岛啤酒:'+(str(price[0]))
-                if(float(str(price[1]))>=29.5):
+                if(float(str(price[1]))<=25):
                     infolist=infolist+'--今世缘:'+(str(price[1]))
                 if(float(str(price[2]))<=5):
                     infolist=infolist+'--天山生物:'+(str(price[2]))
